@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Patients</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        table {
+            margin-top: 20px;
+        }
+        th, td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="my-4">Patients List</h1>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Patient ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+        </tr>
+        </thead>
+        <tbody id="patientData">
+        <!-- Patient rows will be injected here dynamically by JavaScript -->
+        </tbody>
+    </table>
+    <a href="index.html" class="btn btn-primary mt-3">Back to Home</a>
+</div>
+
+<script>
+    // This function will be called to populate patient data dynamically
+    function loadPatientData(patients) {
+        const patientDataContainer = document.getElementById('patientData');
+        patients.forEach(patient => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${patient.id}</td>
+                <td>${patient.name}</td>
+                <td>${patient.age}</td>
+                <td>${patient.gender}</td>
+            `;
+            patientDataContainer.appendChild(row);
+        });
+    }
+
+    // Fetch the patient data from the backend
+    window.onload = function() {
+        fetch('/viewPatients')
+            .then(response => response.json())
+            .then(data => {
+                loadPatientData(data);
+            })
+            .catch(error => {
+                console.error('Error fetching patient data:', error);
+            });
+    }
+</script>
+</body>
+</html>
